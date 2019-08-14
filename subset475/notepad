@@ -1,0 +1,14 @@
+#Step 1 barcoding samples using excel based on SubjectID-Serotype-ST
+One of each strain in each choild chosen
+
+#Randon number generated for all samples, for ech strain barcode, largest number chosen.
+more barcodes.txt | while IFS= read -r line; do more SNM_full_2019.txt | grep $line | tail -n 1; done > SNM_474_metadata.txt
+
+#Bulid phylogenetic tree using ramxl:
+bsub -n6 -R"span[hosts=1]" -M24000 -R "select[mem>24000] rusage[mem=24000]" -o o.%J -e e.%J raxmlHPC-PTHREADS-AVX-8.2.8 -s SNM_474_snps.aln -f a -m GTRGAMMA -x 1000 -N 100 -n run2 -T 6 
+
+#Do the same for full alignment
+bsub -n6 -R"span[hosts=1]" -M24000 -R "select[mem>24000] rusage[mem=24000]" -o o.%J -e e.%J raxmlHPC-PTHREADS-AVX-8.2.8 -s Streptococcus_pneumoniae_Hungary19A_6_GCF_000019265_1_bwa_snps.aln -f a -m GTRGAMMA -x 1000 -N 100 -n SNM_full -T 6
+
+#Tree building failed because of parsimony seed so the -p option was added
+bsub -n6 -R"span[hosts=1]" -M24000 -R "select[mem>24000] rusage[mem=24000]" -o o.%J -e e.%J raxmlHPC-PTHREADS-AVX-8.2.8 -s SNM_474_snps.aln -f a -m GTRGAMMA -x 1000 -N 100 -p 100 -n SNM_474 -T 6

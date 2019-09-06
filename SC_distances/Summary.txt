@@ -1,0 +1,13 @@
+Synopsis: Generate a SNP distance matric for each SC identified in the 464 subset
+Step 1) R script (Write_IDS_for_SCs_to_csv_5Sep19.R)
+  parse through BAPS output
+  write lane IDs for SC to list
+Step 2  Bash Script (make_core_alignment_for_SCs.sh)
+  Use list in pcs5 with pf to place all annotations in a folder
+  Run roary on each folder and generate SC-specific core gene alignment
+Step 3
+  Get SNP distances from each alignment
+  Melt matrix into column
+  Add metadata in
+  Re-do Croucher plot
+  

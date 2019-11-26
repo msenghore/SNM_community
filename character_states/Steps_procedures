@@ -1,0 +1,30 @@
+#1) From the Croucher table table distance table
+# look at comparisons 50 SNPs or less
+# For each Barcode scan metadata to see hoe often in occurs in the full dataset
+
+#Create a column to record the number of times each barcode is present in full dataset
+#Load full metadata and store barcodes in a variable
+Full_meta <- read.csv("../../../Metadata/SNM_Genomes_metadata_barcoded_cleaned_26Aug19.csv")
+Full_dataset_barcodes <- Full_meta$Barcode
+
+#Count occurence for each Barcode
+for (i in 1:nrow(d50)){d50$Count1[i] <- length(grep(d50$Barcode1[i],Full_dataset_barcodes))}
+for (i in 1:nrow(d50)){d50$Count2[i] <- length(grep(d50$Barcode2[i],Full_dataset_barcodes))}
+
+d50 %>% filter(Count1 > 1 | Count2 > 1) %>% select(Sero1) %>% table() %>% sort()
+d50 %>% filter(Count1 > 1 & Count2 > 1) %>% select(Sero1) %>% table() %>% sort()
+
+#Focus on major STs that have the most pairs that are present more than once in each subject
+#Start with the most common ST10542
+Recover 19A tree reconstructed with Gubbins
+Take the SNP alignment from GUbbins and extract snp sites that are specific to the ST10542 clade
+
+#Scan metadata for ST and print lane IDs to a text file to choose sequences from parent alignment (2 seqs absent)
+more SNM_Genomes_metadata_barcoded_cleaned_26Aug19.csv | grep 19A-ST10542 | awk -F"," '{print $1}' | grep -v "5#43" | grep -v "4#63" > ../Serotype_trees/19A/ST10542_leave_names.txt
+
+perl choosefasta.pl Gubbins/SNM1_19A.filtered_polymorphic_sites.fasta ST10542_tree_leaves.txt > 19A_ST10542.aln
+snp-sites -c -o 19A_ST10542.snps.aln 19A_ST10542.aln
+
+#print names of leaves as well as the barcode to be used to rename sequences
+more SNM_Genomes_metadata_barcoded_cleaned_26Aug19.csv | grep 19A-ST10542 | awk -F"," '{print $1}' | grep -v "5#43" | grep -v "4#63" > ../Serotype_trees/19A/ST10542_leave_names.txt
+

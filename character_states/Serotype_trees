@@ -16,3 +16,11 @@ cp ../../../19A/Streptococcus_pneumoniae_Hungary19A_6_GCF_000019265_1.fa* .
 #Run gubbins to remove recombination regions
 run_gubbins.py -c 6 -i 3 -p 19A_tree 19A_core.aln
 
+#Rename nodes
+tree_names <- read.csv("SNM_tree_nodes.csv")
+library("phylotools")
+rename.fasta(infile = "../Character_states/19A/ST10542.snps.fasta", tree_names, "ST10542_renamed.snps.fasta")
+
+##Sort the alignment by sequence ID
+more ST10542_renamed.snps.fasta | seqkit sort > ST10542_renamed.sorted.snps.fasta
+#Visualize with seaview

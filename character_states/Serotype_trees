@@ -1,0 +1,18 @@
+SErotype trees reconstructed for 5 serotypes that had possible transmission of persistent strains
+Serotype,ST,# of comparisons
+6A,913,19
+19A,10542,10
+15B/15C,910,8
+23B,5706,7
+19A,847,6
+15A,917,5
+15A,10594,4
+
+# Use pf on pcs5 to 
+pf data -t file -i 19A_lanes.list -f fastq -l .
+cp ../../../19A/Streptococcus_pneumoniae_Hungary19A_6_GCF_000019265_1.fa* .
+/nfs/pathogen/sh16_scripts/multiple_mappings_to_bam-1.2.py -r Streptococcus_pneumoniae_Hungary19A_6_GCF_000019265_1.fa *gz
+
+#Run gubbins to remove recombination regions
+run_gubbins.py -c 6 -i 3 -p 19A_tree 19A_core.aln
+
